@@ -1,8 +1,8 @@
 import hashlib
 
 
-def check(s, md):
-    if hashlib.md5(s).hexdigest() == md:
+def check(s, md5):
+    if hashlib.md5(s).hexdigest() == md5:
         return True
     return False
 
@@ -11,24 +11,21 @@ md = '5a3ebb487ad0046e52db00570339aace'
 flag = bytearray(b'Y0uReallyKn0wB4s')
 # di = b'0123456789qwertyuiopasdfghjklzxcvbnm'
 di = range(0x20, 0x7F)
-for j1 in di:
-    # flag.insert(13, j1)
-    flag.append(j1)
-    for j2 in di:
-        flag.append(j2)
-        for j3 in di:
-            flag.append(j3)
-            for j4 in di:
-                flag.append(j4)
-                if check(flag, md):
-                    print("Right flag :", flag.decode())
-                    exit()
-                flag.pop()
-            flag.pop()
-        flag.pop()
-    print(flag)
-    # del flag[13]
-    flag.pop()
+ch = [chr(i) for i in range(0x20,0x7f)]
+
+def solve(s, idx, totallenth):
+    if idx == totallenth:
+        if check(s.encode(),md):
+            print(s)
+            exit()
+        else:
+            return 0
+
+    for i in range(len(ch)):
+        solve(s + ch[i], idx + 1, totallenth)
+
+a = 'Y0uReallyKn0wB4s'
+solve(a, len(a), len(a) + 4)
 
 # 纯数字
 # win = 0
