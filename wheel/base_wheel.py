@@ -3,11 +3,12 @@ import base64, base36, base58, base91, py3base92, base128
 # https://github.com/Gu-f/py3base92
 
 
+data = 'flag{123456}'
+
 # base32
 print()
 print('base32:')
 
-data = 'flag{123456}'
 c = base64.b32encode(data.encode())
 print(c)
 m = base64.b32decode(c)
