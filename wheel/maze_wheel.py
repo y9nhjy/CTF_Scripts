@@ -1,5 +1,5 @@
 # DFS
-map = '\
+maze = '\
 .bcsb****\
 ****c****\
 ****s*bc*\
@@ -10,9 +10,25 @@ sbc*sbc**\
 *s*cbs***\
 *bcssbcs#'
 
-n = m = 9
-tx = int(map.index('#') / m)
-ty = map.index('#') % m
+start = '.'
+target = '#'
+road = 'bcs'
+wall = '*'
+m = 9         # 列的数量
+
+direction = ['d', 's', 'a', 'w']
+pace = [
+    [0, 1],  # 右
+    [1, 0],  # 下
+    [0, -1], # 左
+    [-1, 0]  # 上
+]
+
+n = len(maze) // m
+tx = maze.index(target) // m
+ty = maze.index(target) % m
+startx = maze.index(start) // m
+starty = maze.index(start) % m
 book = []
 for i in range(n):
     book.append([])
@@ -24,67 +40,71 @@ ans = ''
 
 def dfs(ex, ey, step, state):
     if ex == tx and ey == ty:
-        ans = step
+        ans = f"flag{{{step}}}"
         print(ans)
     for i in range(4):
-        fx = ex + [0, 1, 0, -1][i]
-        fy = ey + [1, 0, -1, 0][i]
-        if fx < 0 or fy < 0 or fx >= 9 or fy >= 9:
+        fx = ex + pace[i][0]
+        fy = ey + pace[i][1]
+        if fx < 0 or fy < 0 or fx >= n or fy >= m:
             continue
         if state == 'b':
-            if map[fx * 9 + fy] == 'c' and book[fx][fy] == 0 or map[fx * 9 + fy] == '#':
+            if maze[fx * m + fy] == 'c' and book[fx][fy] == 0 or maze[fx * m + fy] == target:
                 book[fx][fy] = 1
-                dfs(fx, fy, step + 'dsaw'[i], 'c')
+                dfs(fx, fy, step + direction[i], 'c')
                 book[fx][fy] = 0
             else:
                 continue
         elif state == 'c':
-            if map[fx * 9 + fy] == 's' and book[fx][fy] == 0 or map[fx * 9 + fy] == '#':
+            if maze[fx * m + fy] == 's' and book[fx][fy] == 0 or maze[fx * m + fy] == target:
                 book[fx][fy] = 1
-                dfs(fx, fy, step + 'dsaw'[i], 's')
+                dfs(fx, fy, step + direction[i], 's')
                 book[fx][fy] = 0
             else:
                 continue
         elif state == 's':
-            if map[fx * 9 + fy] == 'b' and book[fx][fy] == 0 or map[fx * 9 + fy] == '#':
+            if maze[fx * m + fy] == 'b' and book[fx][fy] == 0 or maze[fx * m + fy] == target:
                 book[fx][fy] = 1
-                dfs(fx, fy, step + 'dsaw'[i], 'b')
+                dfs(fx, fy, step + direction[i], 'b')
                 book[fx][fy] = 0
             else:
                 continue
     return
 
 
-book[0][0] = 1
-dfs(0, 0, '', 's')
+book[startx][starty] = 1
+dfs(startx, starty, '', 's')
+
+
+
 
 
 # BFS
 from collections import deque
 
-map = '''\
-***************\
-*S000*0000000**\
-*0**000*****0**\
-*0*00*0*000*0**\
-*000**0*0*0*0**\
-*0***00*0*0*00*\
-*0***0**0*0**0*\
-*000*0*00*00*0*\
-***0*0******0#*\
-***0*00000000**\
-*000********0**\
-*0***00000*00**\
-*0*0*****0**0**\
-*0000000*00000*\
-***************\
+
+maze = '''\
+******************@**************.************...****#..*****.********.*****.****.....*****.****.*********......***********************\
 '''
 
-n = m = 15
-tx = map.index('#') // m
-ty = map.index('#') % m
-startx = 1
-starty = 1
+start = '@'
+target = '#'
+road = '.'
+wall = '*'
+m = 15         # 列的数量
+
+direction = ['d', 's', 'a', 'w']
+pace = [
+    [0, 1],  # 右
+    [1, 0],  # 下
+    [0, -1], # 左
+    [-1, 0]  # 上
+]
+
+n = len(maze) // m
+tx = maze.index(target) // m
+ty = maze.index(target) % m
+startx = maze.index(start) // m
+starty = maze.index(start) % m
 book = []
 for i in range(n):
     book.append([])
@@ -101,14 +121,6 @@ class Note:
         self.s = s  # 步数
 
 
-next = [
-    [0, 1],  # 右
-    [1, 0],  # 下
-    [0, -1], # 左
-    [-1, 0]  # 上
-]
-direction = ['R', 'D', 'L', 'U']
-
 # 队列初始化
 que = deque()
 que.append(Note(startx, starty, "", 0))
@@ -118,10 +130,10 @@ while que:
     head = que.popleft()
 
     for k in range(4):
-        ex = head.x + next[k][0]
-        ey = head.y + next[k][1]
+        ex = head.x + pace[k][0]
+        ey = head.y + pace[k][1]
 
-        if 0 <= ex < n and 0 <= ey < m and map[ex * 15 + ey] == '0' and book[ex][ey] == 0:
+        if 0 <= ex < n and 0 <= ey < m and maze[ex * m + ey] not in wall and book[ex][ey] == 0:
             book[ex][ey] = 1
             que.append(Note(ex, ey, head.f + direction[k], head.s + 1))
 
