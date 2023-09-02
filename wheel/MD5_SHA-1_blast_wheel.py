@@ -7,28 +7,23 @@ def check(s, md5):
     return False
 
 
-md = '5a3ebb487ad0046e52db00570339aace'
+value = '5a3ebb487ad0046e52db00570339aace'
 di = [chr(i) for i in range(0x20, 0x7f)]
-len = 4
+lenth = 4
 begin = 'Y0uReallyKn0wB4s'
 end = ''
-# md = 'c8837b23ff8aaa8a2dde915473ce0991'
-# di = '0123456789'
-# len = 6
-# begin = ''
-# end = ''
 
 
-def solve(s, idx, totallenth):
-    if idx == totallenth:
-        if check((begin + s + end).encode(), md):
+def solve(s, idx, lenth):
+    if idx == lenth:
+        if check((begin + s + end).encode(), value):
             print(begin + s + end)
             exit()
         else:
             return 0
 
     for i in di:
-        solve(s + i, idx + 1, totallenth)
+        solve(s + i, idx + 1, lenth)
 
 
-solve('', 0, len)
+solve('', 0, lenth)
