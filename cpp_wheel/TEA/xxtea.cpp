@@ -1,7 +1,9 @@
 #include<stdio.h>
 #include<stdint.h>
 #define MX (((z>>5^y<<2)+(y>>3^z<<4))^((sum^y)+(key[(p&3)^e]^z)))
+//#define MX (((z>>4^y<<2)+(y>>3^z<<5))^((sum^y)+(key[(e^p&3)]^z)))
 #define DELTA 0x9e3779b9
+//#define DELTA 0x11451400
 //delta=0x61C88647=-(0x9e3779b)
 
 //加密
@@ -48,10 +50,10 @@ void xxtea(uint32_t* v,int n,uint32_t const key[4]){
 }
 
 int main(){
-	uint32_t v[]={0x38FA8A82,0xD7501380,0x0E40969D,0x4E169120,0x713A29AB,0x6CE5393D,0xB69D752E,0x841A88E6,0x6F31B459};
+	uint32_t v[]={689085350, 626885696, 1894439255, 1204672445, 1869189675, 475967424, 1932042439, 1280104741, 2808893494};
 //	uint32_t const k[4]={0x1234,0x2345,0x4567,0x6789};
-	uint32_t const k[4]={0x78,0x73,0x58,0x53};
-	//n=bit(v)/32,正数表示加密,负数表示解密
+	uint32_t const k[4]={12345678, 12398712, 91283904, 12378192};
+//	n=bit(v)/32,正数表示加密,负数表示解密
 	int n=sizeof(v)/sizeof(v[0]);
 	printf("n = %d\n",n);
 //	v:明文 ___bit
@@ -64,8 +66,11 @@ int main(){
 //	}
 	xxtea(v,-n,k);
 	printf("解密后:\n");
+//	for(int i=0;i<n;i++){
+//		printf("%8x",v[i]);
+//	}
 	for(int i=0;i<n;i++){
-		printf("%8x",v[i]);
+		printf("%c%c%c%c",v[i]&0xff,(v[i]>>8)&0xff,(v[i]>>16)&0xff,(v[i]>>24)&0xff);
 	}
 }
 
